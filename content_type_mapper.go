@@ -13,6 +13,7 @@ const (
 	ContentTypeJPEG = "jpeg"
 	ContentTypePDF  = "pdf"
 	ContentTypeGZip = "gzip"
+	ContentTypeAny = ""
 )
 
 var contentTypeMapper = map[string]func(sw *storage.Writer){
@@ -21,6 +22,7 @@ var contentTypeMapper = map[string]func(sw *storage.Writer){
 	ContentTypeJPEG: contentTypeJPEG,
 	ContentTypePDF:  contentTypePDF,
 	ContentTypeGZip: contentTypeGZip,
+	ContentTypeAny: contentTypeAny,
 }
 
 func contentTypeGZip(sw *storage.Writer) {
@@ -41,5 +43,9 @@ func contentTypeJPEG(sw *storage.Writer) {
 }
 
 func contentTypePDF(sw *storage.Writer) {
+	sw.ContentType = "application/pdf"
+}
+
+func contentTypeAny(sw *storage.Writer) {
 	sw.ContentType = "application/pdf"
 }
