@@ -37,9 +37,16 @@ type GCSAdapter struct{}
 // UploadFile : Upload file to the bucket
 func (adapter *GCSAdapter) UploadFile(file *multipart.FileHeader, bucket, filename string) (string, error) {
 	var reader io.Reader
+	name := ""
 
 	fileExt := strings.ToLower(strings.Split(file.Header["Content-Type"][0], "/")[1])
-	name := fmt.Sprintf("%s.%s", filename, fileExt)
+
+	if ext, isExist := extensionMapper[fileExt]; isExist {
+		name = fmt.Sprintf("%s.%s", filename, ext)
+	} else {
+		name = fmt.Sprintf("%s.%s", filename, fileExt)
+	}
+
 	src, err := file.Open()
 	if err != nil {
 		return "", err
