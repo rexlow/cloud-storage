@@ -49,9 +49,10 @@ func contentTypePDF(sw *storage.Writer) {
 }
 
 func contentTypeAny(sw *storage.Writer) {
-	sw.ContentType = "application/pdf"
+	sw.ContentType = ""
 }
 
 func contentTypeApk(sw *storage.Writer) {
 	sw.ContentType = "application/vnd.android.package-archive"
+	sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
 }
