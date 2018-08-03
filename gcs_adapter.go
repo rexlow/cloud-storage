@@ -108,12 +108,16 @@ func (adapter *GCSAdapter) UploadReader(bucket, filename string, reader io.Reade
 	}
 
 	sw := storageClient.Bucket(bucket).Object(filename).NewWriter(ctx)
-	contentFunc, isExist := contentTypeMapper[contentType]
-	if !isExist {
-		return "", fmt.Errorf("Content type %s does not supported", contentType)
-	}
 
-	contentFunc(sw)
+	if contentType == "" {
+		contentTypeAny(sw)
+	} else {
+		contentFunc, isExist := contentTypeMapper[contentType]
+		if !isExist {
+			return "", fmt.Errorf("Content type %s does not supported", contentType)
+		}
+		contentFunc(sw)
+	}
 
 	if _, err := io.Copy(sw, reader); err != nil {
 		msg := fmt.Sprintf("Could not write file: %v", err)

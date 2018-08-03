@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fmt"
+	"strings"
 
 	"cloud.google.com/go/storage"
 )
@@ -14,6 +15,9 @@ const (
 	ContentTypePDF  = "pdf"
 	ContentTypeGZip = "gzip"
 	ContentTypeAPK  = "vnd.android.package-archive"
+	ContentTypeHTML = "html"
+	ContentTypeCSS  = "css"
+	ContentTypeJS   = "js"
 	ContentTypeAny  = ""
 )
 
@@ -24,7 +28,10 @@ var contentTypeMapper = map[string]func(sw *storage.Writer){
 	ContentTypePDF:  contentTypePDF,
 	ContentTypeGZip: contentTypeGZip,
 	ContentTypeAPK:  contentTypeApk,
-	ContentTypeAny:  contentTypeAny,
+	ContentTypeHTML: contentTypeHTML,
+	ContentTypeCSS:  contentTypeCSS,
+	ContentTypeJS:   contentTypeJS,
+	// ContentTypeAny:  contentTypeAny,
 }
 
 func contentTypeGZip(sw *storage.Writer) {
@@ -49,10 +56,28 @@ func contentTypePDF(sw *storage.Writer) {
 }
 
 func contentTypeAny(sw *storage.Writer) {
-	sw.ContentType = ""
+	filenameArr := strings.Split(sw.Name, ".")
+	fileExtension := strings.TrimSpace(filenameArr[len(filenameArr)-1])
+
+	contentFunc, isExist := contentTypeMapper[fileExtension]
+	if isExist {
+		contentFunc(sw)
+	}
 }
 
 func contentTypeApk(sw *storage.Writer) {
 	sw.ContentType = "application/vnd.android.package-archive"
 	sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
+}
+
+func contentTypeHTML(sw *storage.Writer) {
+	sw.ContentType = "text/html"
+}
+
+func contentTypeCSS(sw *storage.Writer) {
+	sw.ContentType = "text/css"
+}
+
+func contentTypeJS(sw *storage.Writer) {
+	sw.ContentType = "application/javascript"
 }
