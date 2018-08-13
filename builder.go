@@ -40,6 +40,11 @@ func (b *Builder) UploadFile(file *multipart.FileHeader, bucket, name string) (s
 	return b.adapter.UploadFile(file, bucket, name)
 }
 
+// ReadFile :
+func (b *Builder) ReadFile(bucket, path string) ([]byte, error) {
+	return b.adapter.ReadFile(bucket, path)
+}
+
 // DeleteFileUsingURL :
 func (b *Builder) DeleteFileUsingURL(bucket, fileURL string) error {
 	return b.adapter.DeleteFileUsingURL(bucket, fileURL)

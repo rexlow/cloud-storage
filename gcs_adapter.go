@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"strings"
 	"time"
@@ -130,6 +131,26 @@ func (adapter *GCSAdapter) UploadReader(bucket, filename string, reader io.Reade
 	}
 
 	return fmt.Sprintf("%s/%s/%s", googleGCSDomain, bucket, filename), nil
+}
+
+// ReadFile :
+func (adapter *GCSAdapter) ReadFile(bucket, path string) ([]byte, error) {
+	ctx := context.Background()
+	client, err := s.NewClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+	rc, err := client.Bucket(bucket).Object(path).NewReader(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rc.Close()
+	slurp, err := ioutil.ReadAll(rc)
+	if err != nil {
+		return nil, err
+	}
+	return slurp, nil
 }
 
 // Buffer :
