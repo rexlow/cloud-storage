@@ -35,6 +35,7 @@ var contentTypeMapper = map[string]func(sw *storage.Writer){
 }
 
 func contentTypeGZip(sw *storage.Writer) {
+	sw.ContentType = "application/zip"
 	sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
 }
 
