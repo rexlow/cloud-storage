@@ -18,6 +18,7 @@ const (
 	ContentTypeHTML = "html"
 	ContentTypeCSS  = "css"
 	ContentTypeJS   = "js"
+	ContentTypeExcel = "xlsx"
 	ContentTypeAny  = ""
 )
 
@@ -31,6 +32,7 @@ var contentTypeMapper = map[string]func(sw *storage.Writer){
 	ContentTypeHTML: contentTypeHTML,
 	ContentTypeCSS:  contentTypeCSS,
 	ContentTypeJS:   contentTypeJS,
+	ContentTypeExcel: contentTypeExcel,
 	// ContentTypeAny:  contentTypeAny,
 }
 
@@ -83,4 +85,9 @@ func contentTypeCSS(sw *storage.Writer) {
 
 func contentTypeJS(sw *storage.Writer) {
 	sw.ContentType = "application/javascript"
+}
+
+func contentTypeExcel(sw *storage.Writer) {
+	sw.ContentType = "application/vnd.ms-excel"
+	sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
 }
