@@ -14,6 +14,17 @@ type Builder struct {
 	err     error
 }
 
+// AliyunClient :
+type AliyunClient struct {
+	Endpoint        string
+	AccessKeyID     string
+	AccessKeySecret string
+}
+
+// GoogleCloudStorageClient :
+type GoogleCloudStorageClient struct {
+}
+
 var client = map[string]bool{
 	GCS: true,
 }
@@ -35,19 +46,60 @@ func NewClient(name string) *Builder {
 	return builder
 }
 
+// New :
+func New(client interface{}) *Builder {
+	builder := new(Builder)
+
+	switch v := client.(type) {
+	case AliyunClient:
+		adapter := new(AliyunAdapter)
+		adapter.Endpoint = v.Endpoint
+		adapter.AccessKeyID = v.AccessKeyID
+		adapter.AccessKeySecret = v.AccessKeySecret
+		builder.adapter = adapter
+
+	case GoogleCloudStorageClient:
+		adapter := new(GCSAdapter)
+		builder.adapter = adapter
+
+	default:
+		builder.err = errors.New("invalid client interface")
+		return builder
+	}
+
+	return builder
+}
+
 // UploadFile :
 func (b *Builder) UploadFile(file *multipart.FileHeader, bucket, name string) (string, error) {
+	if b.err != nil {
+		return "", b.err
+	}
 	return b.adapter.UploadFile(file, bucket, name)
 }
 
 // ReadFile :
 func (b *Builder) ReadFile(bucket, path string) ([]byte, error) {
+	if b.err != nil {
+		return nil, b.err
+	}
 	return b.adapter.ReadFile(bucket, path)
 }
 
 // DeleteFileUsingURL :
 func (b *Builder) DeleteFileUsingURL(bucket, fileURL string) error {
+	if b.err != nil {
+		return b.err
+	}
 	return b.adapter.DeleteFileUsingURL(bucket, fileURL)
+}
+
+// TemporaryServingFile :
+func (b *Builder) TemporaryServingFile(bucket, fileURL string, expiredTime time.Time, client interface{}) (string, error) {
+	if b.err != nil {
+		return "", b.err
+	}
+	return b.adapter.TemporaryServingFile(bucket, fileURL, expiredTime, client)
 }
 
 // GoogleTemporaryServingFile :
@@ -60,6 +112,9 @@ func GoogleTemporaryServingFile(bucket, fileURL string, expiredTime time.Time, c
 
 // UploadReader :
 func (b *Builder) UploadReader(bucket, filename string, reader io.Reader, contentType string) (string, error) {
+	if b.err != nil {
+		return "", b.err
+	}
 	var (
 		errNameIsRequired   = errors.New("storage: filename is required")
 		errBucketIsRequired = errors.New("storage: bucket is required")
@@ -83,6 +138,9 @@ func (b *Builder) UploadReader(bucket, filename string, reader io.Reader, conten
 
 // UploadBuffer :
 func (b *Builder) UploadBuffer(bucket, filename string, contentType string) (*Buffer, error) {
+	if b.err != nil {
+		return nil, b.err
+	}
 	var (
 		errNameIsRequired   = errors.New("storage: filename is required")
 		errBucketIsRequired = errors.New("storage: bucket is required")

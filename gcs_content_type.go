@@ -7,36 +7,21 @@ import (
 	"cloud.google.com/go/storage"
 )
 
-// Content Type
-const (
-	ContentTypeCSV  = "csv"
-	ContentTypePNG  = "png"
-	ContentTypeJPEG = "jpeg"
-	ContentTypePDF  = "pdf"
-	ContentTypeGZip = "gzip"
-	ContentTypeAPK  = "vnd.android.package-archive"
-	ContentTypeHTML = "html"
-	ContentTypeCSS  = "css"
-	ContentTypeJS   = "js"
-	ContentTypeExcel = "xlsx"
-	ContentTypeAny  = ""
-)
-
 var contentTypeMapper = map[string]func(sw *storage.Writer){
-	ContentTypeCSV:  contentTypeCSV,
-	ContentTypePNG:  contentTypePNG,
-	ContentTypeJPEG: contentTypeJPEG,
-	ContentTypePDF:  contentTypePDF,
-	ContentTypeGZip: contentTypeGZip,
-	ContentTypeAPK:  contentTypeApk,
-	ContentTypeHTML: contentTypeHTML,
-	ContentTypeCSS:  contentTypeCSS,
-	ContentTypeJS:   contentTypeJS,
+	ContentTypeCSV:   contentTypeCSV,
+	ContentTypePNG:   contentTypePNG,
+	ContentTypeJPEG:  contentTypeJPEG,
+	ContentTypePDF:   contentTypePDF,
+	ContentTypeZip:   contentTypeZip,
+	ContentTypeAPK:   contentTypeApk,
+	ContentTypeHTML:  contentTypeHTML,
+	ContentTypeCSS:   contentTypeCSS,
+	ContentTypeJS:    contentTypeJS,
 	ContentTypeExcel: contentTypeExcel,
 	// ContentTypeAny:  contentTypeAny,
 }
 
-func contentTypeGZip(sw *storage.Writer) {
+func contentTypeZip(sw *storage.Writer) {
 	sw.ContentType = "application/zip"
 	sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
 }

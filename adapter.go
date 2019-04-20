@@ -17,3 +17,4 @@ type Adapter interface {
 }
 
 var _ Adapter = &GCSAdapter{}
+var _ Adapter = &AliyunAdapter{}

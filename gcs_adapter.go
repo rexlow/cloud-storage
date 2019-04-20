@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -153,15 +152,10 @@ func (adapter *GCSAdapter) ReadFile(bucket, path string) ([]byte, error) {
 	return slurp, nil
 }
 
-// Buffer :
-type Buffer struct {
-	storageWriter *s.Writer
-	bucket        string
-}
-
 // UploadBuffer :
 func (adapter *GCSAdapter) UploadBuffer(bucket, filename string, contentType string) (*Buffer, error) {
 	buf := new(Buffer)
+	buf.adapter = GCS
 
 	ctx := context.Background()
 	storageClient, err := s.NewClient(ctx)
@@ -175,46 +169,4 @@ func (adapter *GCSAdapter) UploadBuffer(bucket, filename string, contentType str
 	contentTypeMapper[contentType](sw)
 
 	return buf, nil
-}
-
-// Copy :
-func (buf *Buffer) Copy(reader io.Reader) error {
-	if _, err := io.Copy(buf.storageWriter, reader); err != nil {
-		msg := fmt.Sprintf("Could not write file: %v", err)
-		return errors.New(msg)
-	}
-
-	return nil
-}
-
-// CopyByte :
-func (buf *Buffer) CopyByte(data []byte) error {
-	d := bytes.NewReader(data)
-	if _, err := io.Copy(buf.storageWriter, d); err != nil {
-		msg := fmt.Sprintf("Could not write file: %v", err)
-		return errors.New(msg)
-	}
-
-	return nil
-}
-
-// CopyString :
-func (buf *Buffer) CopyString(data string) error {
-	d := strings.NewReader(data)
-	if _, err := io.Copy(buf.storageWriter, d); err != nil {
-		msg := fmt.Sprintf("Could not write file: %v", err)
-		return errors.New(msg)
-	}
-
-	return nil
-}
-
-// Close :
-func (buf *Buffer) Close() (string, error) {
-	if err := buf.storageWriter.Close(); err != nil {
-		msg := fmt.Sprintf("Could not put file: %v", err)
-		return "", errors.New(msg)
-	}
-
-	return fmt.Sprintf("%s/%s/%s", googleGCSDomain, buf.bucket, buf.storageWriter.Name), nil
 }
