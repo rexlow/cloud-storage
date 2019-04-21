@@ -9,6 +9,7 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -188,9 +189,10 @@ func (adapter *AliyunAdapter) getClient() (*oss.Client, error) {
 }
 
 func getAliyunFileURL(endpoint, bucket string, filename string) string {
-	return fmt.Sprintf("https://%s.%s/%s", bucket, endpoint, filename)
+	return fmt.Sprintf("%s.%s/%s", bucket, endpoint, filename)
 }
 
 func (adapter *AliyunAdapter) getFilePathFromURL(bucket, fileURL string) string {
-	return strings.Replace(fileURL, fmt.Sprintf("https://%s.%s/", bucket, adapter.Endpoint), "", -1)
+	endpoint := regexp.MustCompile(`^(http|https)://`).ReplaceAllString(fileURL, "")
+	return strings.Replace(fileURL, fmt.Sprintf("%s.%s/", bucket, endpoint), "", -1)
 }
