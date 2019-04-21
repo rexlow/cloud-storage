@@ -194,6 +194,7 @@ func getAliyunFileURL(endpoint, bucket string, filename string) string {
 }
 
 func (adapter *AliyunAdapter) getFilePathFromURL(bucket, fileURL string) string {
-	endpoint := regexp.MustCompile(`^(http|https)://`).ReplaceAllString(fileURL, "")
-	return strings.Replace(fileURL, fmt.Sprintf("%s.%s/", bucket, endpoint), "", -1)
+	endpoint := regexp.MustCompile(`^(http|https)://`).ReplaceAllString(adapter.Endpoint, "")
+	f := regexp.MustCompile(`^(http|https)://`).ReplaceAllString(fileURL, "")
+	return strings.Replace(f, fmt.Sprintf("%s.%s/", bucket, endpoint), "", -1)
 }
