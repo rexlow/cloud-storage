@@ -189,7 +189,8 @@ func (adapter *AliyunAdapter) getClient() (*oss.Client, error) {
 }
 
 func getAliyunFileURL(endpoint, bucket string, filename string) string {
-	return fmt.Sprintf("%s.%s/%s", bucket, endpoint, filename)
+	endpoint = regexp.MustCompile(`^(http|https)://`).ReplaceAllString(endpoint, "")
+	return fmt.Sprintf("https://%s.%s/%s", bucket, endpoint, filename)
 }
 
 func (adapter *AliyunAdapter) getFilePathFromURL(bucket, fileURL string) string {
