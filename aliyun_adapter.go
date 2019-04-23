@@ -135,6 +135,10 @@ func (adapter *AliyunAdapter) ReadFile(bucket, path string) ([]byte, error) {
 	}
 
 	rc, err := object.GetObject(path)
+	if err != nil {
+		return nil, err
+	}
+
 	defer rc.Close()
 	slurp, err := ioutil.ReadAll(rc)
 	if err != nil {
