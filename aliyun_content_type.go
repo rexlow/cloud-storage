@@ -62,7 +62,7 @@ func aliyunContentTypeAny(filename string) []oss.Option {
 	fileExtension := strings.TrimSpace(filenameArr[len(filenameArr)-1])
 
 	options := make([]oss.Option, 0)
-	options = append(options, oss.ContentDisposition(fmt.Sprintf("attachment;filename=%s", filename)))
+	// options = append(options, oss.ContentDisposition(fmt.Sprintf("attachment;filename=%s", filename)))
 
 	contentFunc, isExist := aliyunContentTypeMapper[fileExtension]
 	if isExist {

@@ -47,7 +47,7 @@ func contentTypeAny(sw *storage.Writer) {
 	filenameArr := strings.Split(sw.Name, ".")
 	fileExtension := strings.TrimSpace(filenameArr[len(filenameArr)-1])
 
-	sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
+	// sw.ContentDisposition = fmt.Sprintf("attachment;filename=%s", sw.Name)
 
 	contentFunc, isExist := contentTypeMapper[fileExtension]
 	if isExist {
