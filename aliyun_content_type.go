@@ -11,6 +11,7 @@ var aliyunContentTypeMapper = map[string]func(filename string) []oss.Option{
 	ContentTypeCSV:   aliyunContentTypeCSV,
 	ContentTypePNG:   aliyunContentTypePNG,
 	ContentTypeJPEG:  aliyunContentTypeJPEG,
+	ContentTypeJPG:   aliyunContentTypeJPEG,
 	ContentTypePDF:   aliyunContentTypePDF,
 	ContentTypeZip:   aliyunContentTypeZip,
 	ContentTypeAPK:   aliyunContentTypeApk,

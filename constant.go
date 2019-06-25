@@ -11,6 +11,7 @@ const (
 	ContentTypeCSV   = "csv"
 	ContentTypePNG   = "png"
 	ContentTypeJPEG  = "jpeg"
+	ContentTypeJPG   = "jpg"
 	ContentTypePDF   = "pdf"
 	ContentTypeZip   = "zip"
 	ContentTypeAPK   = "vnd.android.package-archive"
