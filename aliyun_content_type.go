@@ -19,6 +19,7 @@ var aliyunContentTypeMapper = map[string]func(filename string) []oss.Option{
 	ContentTypeCSS:   aliyunContentTypeCSS,
 	ContentTypeJS:    aliyunContentTypeJS,
 	ContentTypeExcel: aliyunContentTypeExcel,
+	ContentTypeSVG:   aliyunContentTypeSVG,
 }
 
 func aliyunContentTypeZip(filename string) []oss.Option {
@@ -107,6 +108,13 @@ func aliyunContentTypeExcel(filename string) []oss.Option {
 	options := make([]oss.Option, 0)
 	options = append(options, oss.ContentType("application/vnd.ms-excel"))
 	options = append(options, oss.ContentDisposition(fmt.Sprintf("attachment;filename=%s", filename)))
+
+	return options
+}
+
+func aliyunContentTypeSVG(filename string) []oss.Option {
+	options := make([]oss.Option, 0)
+	options = append(options, oss.ContentType("image/svg+xml"))
 
 	return options
 }

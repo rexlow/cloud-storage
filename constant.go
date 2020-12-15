@@ -19,5 +19,6 @@ const (
 	ContentTypeCSS   = "css"
 	ContentTypeJS    = "js"
 	ContentTypeExcel = "xlsx"
+	ContentTypeSVG   = "svg+xml"
 	ContentTypeAny   = ""
 )
