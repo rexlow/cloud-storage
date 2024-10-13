@@ -12,6 +12,7 @@ const (
 	ContentTypePNG   = "png"
 	ContentTypeJPEG  = "jpeg"
 	ContentTypeJPG   = "jpg"
+	ContentTypeHEIC  = "heic"
 	ContentTypePDF   = "pdf"
 	ContentTypeZip   = "zip"
 	ContentTypeAPK   = "vnd.android.package-archive"

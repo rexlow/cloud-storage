@@ -12,6 +12,7 @@ var aliyunContentTypeMapper = map[string]func(filename string) []oss.Option{
 	ContentTypePNG:   aliyunContentTypePNG,
 	ContentTypeJPEG:  aliyunContentTypeJPEG,
 	ContentTypeJPG:   aliyunContentTypeJPEG,
+	ContentTypeHEIC:  aliyunContentTypeHeic,
 	ContentTypePDF:   aliyunContentTypePDF,
 	ContentTypeZip:   aliyunContentTypeZip,
 	ContentTypeAPK:   aliyunContentTypeApk,
@@ -48,6 +49,13 @@ func aliyunContentTypePNG(filename string) []oss.Option {
 func aliyunContentTypeJPEG(filename string) []oss.Option {
 	options := make([]oss.Option, 0)
 	options = append(options, oss.ContentType("image/jpeg"))
+
+	return options
+}
+
+func aliyunContentTypeHeic(filename string) []oss.Option {
+	options := make([]oss.Option, 0)
+	options = append(options, oss.ContentType("image/heic"))
 
 	return options
 }

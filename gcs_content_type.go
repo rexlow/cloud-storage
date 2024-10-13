@@ -11,6 +11,7 @@ var contentTypeMapper = map[string]func(sw *storage.Writer){
 	ContentTypeCSV:   contentTypeCSV,
 	ContentTypePNG:   contentTypePNG,
 	ContentTypeJPEG:  contentTypeJPEG,
+	ContentTypeHEIC:  contentTypeHeic,
 	ContentTypePDF:   contentTypePDF,
 	ContentTypeZip:   contentTypeZip,
 	ContentTypeAPK:   contentTypeApk,
@@ -37,6 +38,10 @@ func contentTypePNG(sw *storage.Writer) {
 
 func contentTypeJPEG(sw *storage.Writer) {
 	sw.ContentType = "image/jpeg"
+}
+
+func contentTypeHeic(sw *storage.Writer) {
+	sw.ContentType = "image/heic"
 }
 
 func contentTypePDF(sw *storage.Writer) {
